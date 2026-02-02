@@ -10,7 +10,7 @@ const configuration = getEnvironmentConfiguration(branchName);
 const app = new App();
 
 new PipelineStack(app, `arc-infra-pipeline-${configuration.branch}`, {
-  env: configuration.deployToEnvironment,
+  env: configuration.deployFromEnvironment,
   configuration: configuration,
 });
 
