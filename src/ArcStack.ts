@@ -1,4 +1,5 @@
-import { StageProps, Stage, StackProps, Stack } from 'aws-cdk-lib';
+import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
+import { Aspects, Stack, StackProps, Stage, StageProps } from 'aws-cdk-lib';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -14,6 +15,7 @@ export interface ArcStageProps extends StageProps {
 export class ArcStage extends Stage {
   constructor(scope: Construct, id: string, private readonly props: ArcStageProps) {
     super(scope, id, props);
+    Aspects.of(this).add(new PermissionsBoundaryAspect());
     new ArcStack(this, 'arc-stack', {
       configuration: props.configuration,
       env: props.configuration.deployToEnvironment,
