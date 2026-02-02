@@ -3,6 +3,7 @@ import { Statics } from './Statics';
 
 
 export interface Configuration {
+  branch: string;
   verIdClientId: string;
   verIdIssuerUrl: string;
   arcCallbackEndpoint: string;
@@ -11,6 +12,7 @@ export interface Configuration {
 
 const configuration: Record<string, Configuration> = {
   development: {
+    branch: 'development',
     verIdClientId: '6828f0a8-1c4c-478b-b60e-3db863a8a42e',
     verIdIssuerUrl: 'https://oauth.ssi.dev.ver.garden',
     arcCallbackEndpoint: 'https://mijn-services-dev.csp-nijmegen.nl/arc/callback',

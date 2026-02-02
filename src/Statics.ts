@@ -1,5 +1,8 @@
 export class Statics {
 
+  static readonly projectName = 'arc-infra';
+  static readonly projectRepo = 'GemeenteNijmegen/attestatie-registratie-component-infra';
+
   // MARK: IMPORTED SSM Parameters
   static readonly ssmCertificatePath = '/mijn-services/certificate';
   static readonly ssmCertificateArn = '/mijn-services/certificate/arn';
