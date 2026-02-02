@@ -64,10 +64,12 @@ export class CloudfrontDistributionSubdomain extends Construct {
     new ARecord(this, 'a-record', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
       zone: this.props.hostedZone,
+      recordName: this.props.subdomain,
     });
     new AaaaRecord(this, 'aaaa', {
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
       zone: this.props.hostedZone,
+      recordName: this.props.subdomain,
     });
   }
 
