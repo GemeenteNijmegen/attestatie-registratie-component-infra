@@ -8,6 +8,7 @@ export interface Configuration {
   verIdIssuerUrl: string;
   arcCallbackEndpoint: string;
   deployToEnvironment: Required<Environment>;
+  deployFromEnvironment: Required<Environment>;
 }
 
 const configuration: Record<string, Configuration> = {
@@ -17,6 +18,7 @@ const configuration: Record<string, Configuration> = {
     verIdIssuerUrl: 'https://oauth.ssi.dev.ver.garden',
     arcCallbackEndpoint: 'https://mijn-services-dev.csp-nijmegen.nl/arc/callback',
     deployToEnvironment: Statics.gnMijnServicesDev,
+    deployFromEnvironment: Statics.gnBuildEnvironment,
   },
 };
 
