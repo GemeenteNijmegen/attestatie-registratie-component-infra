@@ -4,6 +4,14 @@ const project = new GemeenteNijmegenCdkApp({
   defaultReleaseBranch: 'main',
   name: 'attestatie-registratie-component-infra',
   projenrcTs: true,
+  releaseWorkflowEnv: {
+    VER_ID_GH_TOKEN: '${{ secrets.VER_ID_GH_TOKEN }}',
+  },
+  buildWorkflowOptions: {
+    env: {
+      VER_ID_GH_TOKEN: '${{ secrets.VER_ID_GH_TOKEN }}',
+    },
+  },
   deps: [
     '@gemeentenijmegen/projen-project-type',
     '@gemeentenijmegen/attestatie-registratie-component',
