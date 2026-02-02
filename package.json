@@ -4,6 +4,8 @@
     "build": "npx projen build",
     "bump": "npx projen bump",
     "bundle": "npx projen bundle",
+    "bundle:AttestatieRegistratieComponent/lambda/arc.lambda": "npx projen bundle:AttestatieRegistratieComponent/lambda/arc.lambda",
+    "bundle:AttestatieRegistratieComponent/lambda/arc.lambda:watch": "npx projen bundle:AttestatieRegistratieComponent/lambda/arc.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -48,7 +50,11 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@gemeentenijmegen/attestatie-registratie-component": "^0.0.14",
     "@gemeentenijmegen/aws-constructs": "^0.0.47",
+    "@gemeentenijmegen/cross-region-parameters": "^0.0.4",
+    "@gemeentenijmegen/utils": "^0.0.38",
+    "@types/aws-lambda": "^8.10.160",
     "aws-cdk-lib": "^2.1.0",
     "constructs": "^10.0.5"
   },

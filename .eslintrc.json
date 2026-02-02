@@ -153,6 +153,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
+          "src/AttestatieRegistratieComponent/lambda/arc.lambda.ts",
           ".projenrc.ts",
           "projenrc/**/*.ts"
         ],

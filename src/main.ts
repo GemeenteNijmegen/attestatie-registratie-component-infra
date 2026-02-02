@@ -1,23 +1,53 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 
-export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
+import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Construct } from 'constructs';
+import { AttestatieRegistratieComponent } from './AttestatieRegistratieComponent/AttestatieRegistratieComponent';
+import { CloudfrontDistributionSubdomain } from './CloudfrontDistributionSubdomain';
+import { Configuration, getEnvironmentConfiguration } from './Configuration';
+import { Statics } from './Statics';
+
+interface ArcStackProps extends StackProps {
+  configuration: Configuration;
+}
+
+export class ArcStack extends Stack {
+  constructor(scope: Construct, id: string, private readonly props: ArcStackProps) {
     super(scope, id, props);
 
-    // define resources here...
+    // Import exisitng hosted zone
+    const hostedzone = HostedZone.fromHostedZoneAttributes(this, 'hostedzone', {
+      hostedZoneId: StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneId),
+      zoneName: StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneName),
+    });
+
+    // Setup arc
+    const arc = new AttestatieRegistratieComponent(this, 'arc', {
+      arcCallbackEndpoint: this.props.configuration.arcCallbackEndpoint,
+      verIdClientId: this.props.configuration.verIdClientId,
+      verIdIssuerUrl: this.props.configuration.verIdIssuerUrl,
+    });
+
+    // Setup cloudfront incl subdomain for existing hosted zone
+    new CloudfrontDistributionSubdomain(this, 'cloudfront', {
+      functionUrl: arc.functionUrl,
+      hostedZone: hostedzone,
+      subdomain: 'arc',
+    });
+
   }
 }
 
-// for development, use account/region from cdk cli
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
-};
+const branchName = process.env.BRANCH_NAME ?? 'development';
+console.log('Building for branch:', branchName);
+const configuration = getEnvironmentConfiguration(branchName);
 
 const app = new App();
 
-new MyStack(app, 'attestatie-registratie-component-infra-dev', { env: devEnv });
-// new MyStack(app, 'attestatie-registratie-component-infra-prod', { env: prodEnv });
+new ArcStack(app, 'arc-stack', {
+  env: configuration.deployToEnvironment,
+  configuration: configuration,
+});
 
 app.synth();
