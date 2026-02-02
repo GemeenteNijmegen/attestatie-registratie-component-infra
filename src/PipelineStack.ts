@@ -10,7 +10,7 @@ import { Configuration } from './Configuration';
 import { Statics } from './Statics';
 
 export interface PipelineStackProps extends StackProps {
-  configuration: Configuration
+  configuration: Configuration;
 }
 
 /**
@@ -56,10 +56,10 @@ export class PipelineStack extends Stack {
 
   pipeline(source: pipelines.CodePipelineSource, props: PipelineStackProps): pipelines.CodePipeline {
     // We use a private package
-    const secret = new Secret(this, 'ver-id-github-token', {
+    const verIdGithubSecret = new Secret(this, 'ver-id-github-token', {
       description: 'Github token for private package from verid',
     });
-    this.secrets.VER_ID_GH_TOKEN = secret;
+    this.secrets.VER_ID_GH_TOKEN = verIdGithubSecret;
 
 
     const synthStep = new pipelines.ShellStep('Synth', {

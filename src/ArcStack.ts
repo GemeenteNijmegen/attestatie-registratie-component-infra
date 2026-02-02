@@ -1,11 +1,11 @@
-import { StageProps, Stage, StackProps, Stack } from "aws-cdk-lib";
-import { HostedZone } from "aws-cdk-lib/aws-route53";
-import { StringParameter } from "aws-cdk-lib/aws-ssm";
-import { Construct } from "constructs";
-import { AttestatieRegistratieComponent } from "./AttestatieRegistratieComponent/AttestatieRegistratieComponent";
-import { CloudfrontDistributionSubdomain } from "./CloudfrontDistributionSubdomain";
-import { Configuration } from "./Configuration";
-import { Statics } from "./Statics";
+import { StageProps, Stage, StackProps, Stack } from 'aws-cdk-lib';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Construct } from 'constructs';
+import { AttestatieRegistratieComponent } from './AttestatieRegistratieComponent/AttestatieRegistratieComponent';
+import { CloudfrontDistributionSubdomain } from './CloudfrontDistributionSubdomain';
+import { Configuration } from './Configuration';
+import { Statics } from './Statics';
 
 export interface ArcStageProps extends StageProps {
   configuration: Configuration;
@@ -17,7 +17,7 @@ export class ArcStage extends Stage {
     new ArcStack(this, 'arc-stack', {
       configuration: props.configuration,
       env: props.configuration.deployToEnvironment,
-    })
+    });
   }
 }
 
