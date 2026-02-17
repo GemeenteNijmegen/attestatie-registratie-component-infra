@@ -12,4 +12,8 @@ const project = new GemeenteNijmegenCdkApp({
     '@types/aws-lambda',
   ],
 });
+
+const buildWorkflow = project.github?.tryFindWorkflow('build');
+buildWorkflow?.file?.addOverride('jobs.build.env.VER_ID_GH_TOKEN', '${{ secrets.VER_ID_GH_TOKEN }}');
+
 project.synth();
