@@ -3,8 +3,7 @@ import { App, Stack, StackProps } from 'aws-cdk-lib';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { AttestatieRegistratieComponent } from './AttestatieRegistratieComponent/AttestatieRegistratieComponent';
-import { CloudfrontDistributionSubdomain } from './CloudfrontDistributionSubdomain';
+import { ArcService } from './ArcService';
 import { Configuration, getEnvironmentConfiguration } from './Configuration';
 import { Statics } from './Statics';
 
@@ -22,20 +21,10 @@ export class ArcStack extends Stack {
       zoneName: StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneName),
     });
 
-    // Setup arc
-    const arc = new AttestatieRegistratieComponent(this, 'arc', {
-      arcCallbackEndpoint: this.props.configuration.arcCallbackEndpoint,
-      verIdClientId: this.props.configuration.verIdClientId,
-      verIdIssuerUrl: this.props.configuration.verIdIssuerUrl,
-    });
-
-    // Setup cloudfront incl subdomain for existing hosted zone
-    new CloudfrontDistributionSubdomain(this, 'cloudfront', {
-      functionUrl: arc.functionUrl,
+    new ArcService(this, 'arc-service', {
       hostedZone: hostedzone,
-      subdomain: 'arc',
+      configuration: this.props.configuration,
     });
-
   }
 }
 
