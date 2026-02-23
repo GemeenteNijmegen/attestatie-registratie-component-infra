@@ -1,4 +1,4 @@
-import { AttributeType, BillingMode, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { Function, FunctionUrl } from 'aws-cdk-lib/aws-lambda';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
