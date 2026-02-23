@@ -1,7 +1,14 @@
 import { randomUUID } from 'crypto';
-import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService, VerIdAttestationServiceConfig } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
+import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBEvent, ALBResult } from 'aws-lambda';
+
+const dynamoClient = DynamoDBDocumentClient.from(
+  new DynamoDBClient({}),
+);
 /**
  * Very minimal setup to test full cycle
  * @param event
@@ -10,15 +17,21 @@ import { ALBEvent, ALBResult } from 'aws-lambda';
 export async function handler(event: ALBEvent): Promise<ALBResult> {
 
   try {
-
-
+    const dynamoDbCacheManager = new DynamoDBCacheManager({
+      client: dynamoClient,
+      tableName: process.env.CACHE_TABLE_NAME!,
+      options: {
+        ttlSeconds: 600,
+      },
+    });
     const arc = new AttestatieRegestratieComponent({
       attestationService: new VerIdAttestationService({
         client_id: process.env.VERID_CLIENT_ID!,
         client_secret: await AWS.getSecret(process.env.VERID_CLIENT_SECRET!),
         issuerUri: process.env.VERID_ISSUER_URL!,
         redirectUri: process.env.ARC_CALLBACK_ENDPOINT!,
-      }),
+        cacheManager: dynamoDbCacheManager,
+      } as VerIdAttestationServiceConfig),
       productenService: new ProductenService(),
     });
 

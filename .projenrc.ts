@@ -10,6 +10,9 @@ const project = new GemeenteNijmegenCdkApp({
     '@gemeentenijmegen/cross-region-parameters',
     '@gemeentenijmegen/utils',
     '@types/aws-lambda',
+    '@aws-sdk/client-dynamodb',
+    '@aws-sdk/lib-dynamodb',
+    '@ver-id/node-client',
   ],
 });
 project.synth();
