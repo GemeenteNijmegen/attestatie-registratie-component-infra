@@ -55,13 +55,6 @@ export class PipelineStack extends Stack {
   }
 
   pipeline(source: pipelines.CodePipelineSource, props: PipelineStackProps): pipelines.CodePipeline {
-    // We use a private package
-    const verIdGithubSecret = new Secret(this, 'ver-id-github-token', {
-      description: 'Github token for private package from verid',
-    });
-    this.secrets.VER_ID_GH_TOKEN = verIdGithubSecret;
-
-
     const synthStep = new pipelines.ShellStep('Synth', {
       input: source,
       env: {

@@ -9,8 +9,3 @@ set -a
 source .env
 set +a
 ```
-
-Where .env looks like
-```
-VER_ID_GH_TOKEN=<token>
-```
