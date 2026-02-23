@@ -51,7 +51,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.995.0",
     "@aws-sdk/lib-dynamodb": "^3.995.0",
-    "@gemeentenijmegen/attestatie-registratie-component": "^0.0.14",
+    "@gemeentenijmegen/attestatie-registratie-component": "^0.0.19",
     "@gemeentenijmegen/aws-constructs": "^0.0.47",
     "@gemeentenijmegen/cross-region-parameters": "^0.0.4",
     "@gemeentenijmegen/projen-project-type": "^1.12.1",
