@@ -77,6 +77,14 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@gemeentenijmegen/attestatie-registratie-component",
       "type": "runtime"
     },
@@ -98,6 +106,10 @@
     },
     {
       "name": "@types/aws-lambda",
+      "type": "runtime"
+    },
+    {
+      "name": "@ver-id/node-client",
       "type": "runtime"
     },
     {

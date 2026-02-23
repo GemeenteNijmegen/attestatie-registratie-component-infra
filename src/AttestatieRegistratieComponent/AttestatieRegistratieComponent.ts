@@ -1,3 +1,4 @@
+import { AttributeType, BillingMode, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { Function, FunctionUrl } from 'aws-cdk-lib/aws-lambda';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -25,15 +26,25 @@ export class AttestatieRegistratieComponent extends Construct {
       description: 'Client secret VerID issueance',
     });
 
+    const veridCacheTable = new TableV2(this, 'verid-cache-table', {
+      partitionKey: {
+        name: 'pk',
+        type: AttributeType.STRING,
+      },
+      timeToLiveAttribute: 'ttl',
+    });
+
     const arc = new ArcFunction(this, 'arc-function', {
       environment: {
         VERID_CLIENT_ID: this.props.verIdClientId,
         VERID_CLIENT_SECRET: clientSecret.secretArn,
         VERID_ISSUER_URL: this.props.verIdIssuerUrl,
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,
+        CACHE_TABLE_NAME: veridCacheTable.tableName,
       },
     });
 
+    veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
     return arc;
   }
