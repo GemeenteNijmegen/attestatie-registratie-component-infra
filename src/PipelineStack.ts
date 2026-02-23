@@ -48,7 +48,7 @@ export class PipelineStack extends Stack {
     // Trigger build so we can access the synth project
     pipeline.buildPipeline();
 
-    Object.entries(this.secrets).forEach(([_, secret]) => {
+    Object.values(this.secrets).forEach((secret) => {
       secret.grantRead(pipeline.synthProject);
     });
 
