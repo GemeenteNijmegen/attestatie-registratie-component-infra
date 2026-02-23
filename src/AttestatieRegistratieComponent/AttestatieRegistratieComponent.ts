@@ -26,6 +26,10 @@ export class AttestatieRegistratieComponent extends Construct {
       description: 'Client secret VerID issueance',
     });
 
+    const jwtSecret = new Secret(this, 'jwt-secret', {
+      description: 'Secret for JWT token verification',
+    });
+
     const veridCacheTable = new TableV2(this, 'verid-cache-table', {
       partitionKey: {
         name: 'pk',
@@ -41,11 +45,13 @@ export class AttestatieRegistratieComponent extends Construct {
         VERID_ISSUER_URL: this.props.verIdIssuerUrl,
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,
         CACHE_TABLE_NAME: veridCacheTable.tableName,
+        JWT_SECRET: jwtSecret.secretArn,
       },
     });
 
     veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
+    jwtSecret.grantRead(arc);
     return arc;
   }
 

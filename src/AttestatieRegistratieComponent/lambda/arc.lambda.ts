@@ -33,6 +33,7 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
         cacheManager: dynamoDbCacheManager,
       } as VerIdAttestationServiceConfig),
       productenService: new ProductenService(),
+      jwtSecret: await AWS.getSecret(process.env.JWT_SECRET!),
     });
 
     if (event.path.includes('/start')) {
@@ -67,9 +68,12 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
 async function start(event: ALBEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
   console.log('Handling start...', event);
 
+  const token = event.queryStringParameters?.token || event.headers?.authorization?.replace('Bearer ', '');
+
   const redirectUri = await arc.start({
     id: randomUUID(),
     type: 'producten',
+    token: token!,
   });
 
   return {
