@@ -88,11 +88,11 @@ export class PipelineStack extends Stack {
             },
           },
           cache: {
-            paths: ['node_modules/**/*'],
+            paths: ['node_modules'],
           },
         }),
       },
-    });
+    } as any as pipelines.CodePipelineProps);
 
     return pipeline;
   }
