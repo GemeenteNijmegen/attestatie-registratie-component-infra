@@ -39,7 +39,7 @@ export class CloudfrontDistributionSubdomain extends Construct {
   createDistribution() {
     const certificate = Certificate.fromCertificateArn(this, 'certificate', this.certificateArn());
 
-    const origin = new aws_cloudfront_origins.FunctionUrlOrigin(this.props.functionUrl);
+    const origin = aws_cloudfront_origins.FunctionUrlOrigin.withOriginAccessControl(this.props.functionUrl);
 
     const distribution = new Distribution(this, 'MyDistribution', {
       comment: 'Distribution for arc infra',

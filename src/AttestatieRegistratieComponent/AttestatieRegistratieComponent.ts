@@ -1,5 +1,5 @@
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
-import { Function, FunctionUrl } from 'aws-cdk-lib/aws-lambda';
+import { Function, FunctionUrl, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
@@ -56,6 +56,7 @@ export class AttestatieRegistratieComponent extends Construct {
   private setupFunctionUrl(lambda: Function) {
     return new FunctionUrl(this, 'function-url', {
       function: lambda,
+      authType: FunctionUrlAuthType.AWS_IAM, // Use IAM to allow cloudfront access to this function url
     });
   }
 
