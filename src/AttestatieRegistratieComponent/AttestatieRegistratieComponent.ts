@@ -1,5 +1,6 @@
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
-import { Function, FunctionUrl } from 'aws-cdk-lib/aws-lambda';
+import { FunctionUrl } from 'aws-cdk-lib/aws-lambda';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { ArcFunction } from './lambda/arc-function';
@@ -17,7 +18,7 @@ export class AttestatieRegistratieComponent extends Construct {
   constructor(scope: Construct, id: string, private readonly props: AttestatieRegistratieComponentProps) {
     super(scope, id);
     const lambda = this.setupLambda();
-    this.functionUrl = this.setupFunctionUrl(lambda);
+    // this.functionUrl = this.setupFunctionUrl(lambda);
   }
 
   private setupLambda() {
@@ -42,17 +43,14 @@ export class AttestatieRegistratieComponent extends Construct {
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,
         CACHE_TABLE_NAME: veridCacheTable.tableName,
       },
+      logGroup: new LogGroup(this, 'arc-logs', {
+        retention: RetentionDays.ONE_MONTH,
+      })
     });
 
     veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
     return arc;
-  }
-
-  private setupFunctionUrl(lambda: Function) {
-    return new FunctionUrl(this, 'function-url', {
-      function: lambda,
-    });
   }
 
 }
