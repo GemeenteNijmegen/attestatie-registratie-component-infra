@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService, VerIdAttestationServiceConfig } from '@gemeentenijmegen/attestatie-registratie-component';
+import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBEvent, ALBResult } from 'aws-lambda';
@@ -31,7 +31,7 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
         issuerUri: process.env.VERID_ISSUER_URL!,
         redirectUri: process.env.ARC_CALLBACK_ENDPOINT!,
         cacheManager: dynamoDbCacheManager,
-      } as VerIdAttestationServiceConfig),
+      }),
       productenService: new ProductenService(),
       apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
     });
