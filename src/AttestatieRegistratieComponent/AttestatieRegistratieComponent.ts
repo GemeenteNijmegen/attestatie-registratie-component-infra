@@ -2,7 +2,6 @@ import { Stack } from 'aws-cdk-lib';
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, FunctionUrl, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import { ArcFunction } from './lambda/arc-function';
@@ -50,9 +49,6 @@ export class AttestatieRegistratieComponent extends Construct {
         CACHE_TABLE_NAME: veridCacheTable.tableName,
         ARC_API_KEY_ARN: apiKey.secretArn,
       },
-      logGroup: new LogGroup(this, 'arc-logs', {
-        retention: RetentionDays.ONE_MONTH,
-      }),
     });
 
     arc.grantInvoke(new ServicePrincipal('cloudfront.amazonaws.com', {
