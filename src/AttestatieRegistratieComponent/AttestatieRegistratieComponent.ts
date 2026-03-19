@@ -58,10 +58,10 @@ export class AttestatieRegistratieComponent extends Construct {
     arc.grantInvoke(new ServicePrincipal('cloudfront.amazonaws.com', {
       conditions: {
         ArnLike: {
-          'AWS:SourceArn': `arn:aws:cloudfront::${Stack.of(this).account}:distribution/*`, // https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
-        }
-      }
-    }))
+          'aws:SourceArn': `arn:aws:cloudfront::${Stack.of(this).account}:distribution/*`, // https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
+        },
+      },
+    }));
 
     veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
