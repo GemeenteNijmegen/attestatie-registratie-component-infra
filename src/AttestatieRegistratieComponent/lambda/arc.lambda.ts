@@ -1,10 +1,10 @@
-import { randomUUID } from 'crypto';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService, VerIdAttestationServiceConfig } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBEvent, ALBResult } from 'aws-lambda';
+import { randomUUID } from 'crypto';
 
 const dynamoClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({}),
@@ -33,6 +33,7 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
         cacheManager: dynamoDbCacheManager,
       } as VerIdAttestationServiceConfig),
       productenService: new ProductenService(),
+      // apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
     });
 
     if (event.path.includes('/start')) {
@@ -70,6 +71,7 @@ async function start(event: ALBEvent, arc: AttestatieRegestratieComponent): Prom
   const redirectUri = await arc.start({
     id: randomUUID(),
     type: 'producten',
+    token: event.headers?.['x-api-key'] ?? "undefined",
   });
 
   return {

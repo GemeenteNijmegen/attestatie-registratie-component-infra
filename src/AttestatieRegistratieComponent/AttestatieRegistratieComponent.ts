@@ -1,4 +1,6 @@
+import { Stack } from 'aws-cdk-lib';
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
+import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, FunctionUrl, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -35,6 +37,10 @@ export class AttestatieRegistratieComponent extends Construct {
       timeToLiveAttribute: 'ttl',
     });
 
+    const apiKey = new Secret(this, 'arc-api-key', {
+      description: 'API key for ARC',
+    });
+
     const arc = new ArcFunction(this, 'arc-function', {
       environment: {
         VERID_CLIENT_ID: this.props.verIdClientId,
@@ -42,14 +48,24 @@ export class AttestatieRegistratieComponent extends Construct {
         VERID_ISSUER_URL: this.props.verIdIssuerUrl,
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,
         CACHE_TABLE_NAME: veridCacheTable.tableName,
+        ARC_API_KEY_ARN: apiKey.secretArn,
       },
       logGroup: new LogGroup(this, 'arc-logs', {
         retention: RetentionDays.ONE_MONTH,
       }),
     });
 
+    arc.grantInvoke(new ServicePrincipal('cloudfront.amazonaws.com', {
+      conditions: {
+        ArnLike: {
+          'AWS:SourceArn': `arn:aws:cloudfront::${Stack.of(this).account}:distribution/*`, // https://docs.aws.amazon.com/lambda/latest/dg/urls-auth.html
+        }
+      }
+    }))
+
     veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
+    apiKey.grantRead(arc);
     return arc;
   }
 

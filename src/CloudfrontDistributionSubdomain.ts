@@ -47,7 +47,7 @@ export class CloudfrontDistributionSubdomain extends Construct {
         origin: origin,
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: AllowedMethods.ALLOW_ALL,
-        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER,
+        originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER, // ALL_VIWER does not work with lambda
         cachePolicy: CachePolicy.CACHING_DISABLED, // Maybe later we can look into this
       },
       defaultRootObject: 'index.html',
