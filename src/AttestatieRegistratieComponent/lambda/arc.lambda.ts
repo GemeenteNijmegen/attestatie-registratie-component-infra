@@ -3,7 +3,7 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
-import { ALBEvent, ALBResult } from 'aws-lambda';
+import { ALBResult, LambdaFunctionURLEvent } from 'aws-lambda';
 import { randomUUID } from 'crypto';
 
 const dynamoClient = DynamoDBDocumentClient.from(
@@ -14,7 +14,7 @@ const dynamoClient = DynamoDBDocumentClient.from(
  * @param event
  * @returns
  */
-export async function handler(event: ALBEvent): Promise<ALBResult> {
+export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult> {
 
   try {
     const dynamoDbCacheManager = new DynamoDBCacheManager({
@@ -36,11 +36,11 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
       apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
     });
 
-    if (event.path.includes('/start')) {
+    if (event.rawPath.includes('/start')) {
       return await start(event, arc);
     };
 
-    if (event.path.includes('/callback')) {
+    if (event.rawPath.includes('/callback')) {
       return await callback(event, arc);
     };
 
@@ -65,7 +65,7 @@ export async function handler(event: ALBEvent): Promise<ALBResult> {
 }
 
 
-async function start(event: ALBEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+async function start(event: LambdaFunctionURLEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
   console.log('Handling start...', event);
 
   const redirectUri = await arc.start({
@@ -83,7 +83,7 @@ async function start(event: ALBEvent, arc: AttestatieRegestratieComponent): Prom
   };
 }
 
-async function callback(event: ALBEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+async function callback(event: LambdaFunctionURLEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
   console.log('Handling callback...', event);
 
   const success = await arc.callback(event);
