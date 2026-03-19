@@ -17,8 +17,7 @@ export class AttestatieRegistratieComponent extends Construct {
 
   constructor(scope: Construct, id: string, private readonly props: AttestatieRegistratieComponentProps) {
     super(scope, id);
-    const lambda = this.setupLambda();
-    // this.functionUrl = this.setupFunctionUrl(lambda);
+    this.setupLambda();
   }
 
   private setupLambda() {
