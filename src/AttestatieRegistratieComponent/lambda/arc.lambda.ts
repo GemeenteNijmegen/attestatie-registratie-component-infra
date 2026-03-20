@@ -21,8 +21,8 @@ function parseEvent(event: LambdaFunctionURLEvent): ArcRequest {
     path: event.rawPath,
     productId: event.queryStringParameters?.productId ?? '',
     type: event.queryStringParameters?.type ?? '',
-    authorization: event.headers?.['x-api-key'] ?? event.headers?.['Authorization'],
-  }
+    authorization: event.headers?.['x-api-key'] ?? event.headers?.Authorization,
+  };
 }
 
 /**
@@ -89,7 +89,7 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
 async function start(request: ArcRequest, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
   console.log('Handling start...', request);
 
-  if (request.type != "producten" || !request.authorization) {
+  if (request.type != 'producten' || !request.authorization) {
     throw Error('Invalid request');
   }
 
