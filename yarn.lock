@@ -1290,15 +1290,15 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
-"@gemeentenijmegen/attestatie-registratie-component@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/attestatie-registratie-component/-/attestatie-registratie-component-0.0.21.tgz#bea65aa8e2926a94c0c782a6fb3b454bcb8399bb"
-  integrity sha512-MfejnV/V+rpDtIRyJiBrHxPXRo49KsOvrd2pXpuqfUVmsncoQIGnbzaGQ+Ru17J3j3h4k9/X7894UAQFsDvRig==
+"@gemeentenijmegen/attestatie-registratie-component@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/attestatie-registratie-component/-/attestatie-registratie-component-0.0.22.tgz#990efa35a0d1a601e6a289502d50e41719c9e6a5"
+  integrity sha512-zQ1PdlmTEoDrnYV1AQPe+UjUOGEqy9gnQvj2WmDqIuf6lJKoRne9LrxcmH2L8gTMrg7vWwO+cYgILiAuwg+6Bg==
   dependencies:
-    "@ver-id/node-client" "^0.10.2"
-    dotenv "^17.2.3"
+    "@ver-id/node-client" "^0.11.0"
+    dotenv "^17.3.1"
     jsonwebtoken "^9.0.3"
-    zod "^3.22.4"
+    zod "^4"
 
 "@gemeentenijmegen/aws-constructs@^0.0.49":
   version "0.0.49"
@@ -2595,11 +2595,6 @@
   resolved "https://registry.yarnpkg.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@ver-id/node-client@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@ver-id/node-client/-/node-client-0.10.2.tgz#893f169474a20ac7c25df6ab101e213aed0acbed"
-  integrity sha512-Iq+VDDe93N/bGuIBJrA2tHSjr/P9jMgOyArXaCDvAuS5ISL2PvDVjYGvqV5yGX2La/pX9/vuswsgZiQAEl3cZQ==
-
 "@ver-id/node-client@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@ver-id/node-client/-/node-client-0.11.0.tgz#22c57e1149292931cea610c8fd4c8748777c9e0a"
@@ -3495,7 +3490,7 @@ dot-prop@^5.1.0:
   dependencies:
     is-obj "^2.0.0"
 
-dotenv@^17.2.3:
+dotenv@^17.3.1:
   version "17.3.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-17.3.1.tgz#2706f5b0165e45a1503348187b8468f87fe6aae2"
   integrity sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==
@@ -7126,12 +7121,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@^3.22.4:
-  version "3.25.76"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
-  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
-
-zod@^4.3.6:
+zod@^4, zod@^4.3.6:
   version "4.3.6"
   resolved "https://registry.yarnpkg.com/zod/-/zod-4.3.6.tgz#89c56e0aa7d2b05107d894412227087885ab112a"
   integrity sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==
