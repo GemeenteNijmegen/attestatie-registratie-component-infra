@@ -4,17 +4,35 @@ import { AttestatieRegestratieComponent, OpenProductApiService, VerIdAttestation
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBResult, LambdaFunctionURLEvent } from 'aws-lambda';
-import { randomUUID } from 'crypto';
 
 const dynamoClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({}),
 );
+
+interface ArcRequest {
+  path: string;
+  productId: string;
+  type: string;
+  authorization?: string;
+}
+
+function parseEvent(event: LambdaFunctionURLEvent): ArcRequest {
+  return {
+    path: event.rawPath,
+    productId: event.queryStringParameters?.productId ?? '',
+    type: event.queryStringParameters?.type ?? '',
+    authorization: event.headers?.['x-api-key'] ?? event.headers?.['Authorization'],
+  }
+}
+
 /**
  * Very minimal setup to test full cycle
  * @param event
  * @returns
  */
 export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult> {
+
+  const request = parseEvent(event);
 
   try {
     const dynamoDbCacheManager = new DynamoDBCacheManager({
@@ -39,12 +57,12 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
       apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
     });
 
-    if (event.rawPath.includes('/start')) {
-      return await start(event, arc);
+    if (request.path.includes('/start')) {
+      return await start(request, arc);
     };
 
-    if (event.rawPath.includes('/callback')) {
-      return await callback(event, arc);
+    if (request.path.includes('/callback')) {
+      return await callback(request, arc);
     };
 
   } catch (error) {
@@ -68,13 +86,17 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
 }
 
 
-async function start(event: LambdaFunctionURLEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
-  console.log('Handling start...', event);
+async function start(request: ArcRequest, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+  console.log('Handling start...', request);
+
+  if (request.type != "producten" || !request.authorization) {
+    throw Error('Invalid request');
+  }
 
   const redirectUri = await arc.start({
-    id: randomUUID(),
-    type: 'producten',
-    token: event.headers?.['x-api-key'] ?? 'undefined',
+    id: request.productId,
+    type: request.type,
+    token: request.authorization,
   });
 
   return {
@@ -86,10 +108,10 @@ async function start(event: LambdaFunctionURLEvent, arc: AttestatieRegestratieCo
   };
 }
 
-async function callback(event: LambdaFunctionURLEvent, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
-  console.log('Handling callback...', event);
+async function callback(request: ArcRequest, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+  console.log('Handling callback...', request);
 
-  const success = await arc.callback(event);
+  const success = await arc.callback(request);
 
   return {
     statusCode: 302,
