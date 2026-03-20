@@ -40,6 +40,10 @@ export class AttestatieRegistratieComponent extends Construct {
       description: 'API key for ARC',
     });
 
+    const openProductApiKey = new Secret(this, 'open-product-api-key', {
+      description: 'API key for OpenProduct',
+    });
+
     const arc = new ArcFunction(this, 'arc-function', {
       environment: {
         VERID_CLIENT_ID: this.props.verIdClientId,
@@ -48,6 +52,8 @@ export class AttestatieRegistratieComponent extends Construct {
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,
         CACHE_TABLE_NAME: veridCacheTable.tableName,
         ARC_API_KEY_ARN: apiKey.secretArn,
+        OPEN_PRODUCT_API_KEY: openProductApiKey.secretArn,
+        OPEN_PRODUCT_BASE_URL: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1'
       },
     });
 
@@ -59,6 +65,7 @@ export class AttestatieRegistratieComponent extends Construct {
       },
     }));
 
+    openProductApiKey.grantRead(arc);
     veridCacheTable.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
     apiKey.grantRead(arc);

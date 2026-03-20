@@ -49,9 +49,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.1012.0",
-    "@aws-sdk/lib-dynamodb": "^3.1012.0",
-    "@gemeentenijmegen/attestatie-registratie-component": "^0.0.20",
+    "@aws-sdk/client-dynamodb": "^3.1013.0",
+    "@aws-sdk/lib-dynamodb": "^3.1013.0",
+    "@gemeentenijmegen/attestatie-registratie-component": "^0.0.21",
     "@gemeentenijmegen/aws-constructs": "^0.0.49",
     "@gemeentenijmegen/cross-region-parameters": "^0.0.5",
     "@gemeentenijmegen/projen-project-type": "^1.12.2",

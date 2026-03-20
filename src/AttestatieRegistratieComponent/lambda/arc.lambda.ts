@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { AttestatieRegestratieComponent, ProductenService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
+import { AttestatieRegestratieComponent, OpenProductApiService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBResult, LambdaFunctionURLEvent } from 'aws-lambda';
@@ -32,7 +32,10 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
         redirectUri: process.env.ARC_CALLBACK_ENDPOINT!,
         cacheManager: dynamoDbCacheManager,
       }),
-      productenService: new ProductenService(),
+      productenService: new OpenProductApiService({
+        apiToken: await AWS.getSecret(process.env.OPEN_PRODUCT_API_KEY!),
+        baseUrl: process.env.OPEN_PRODUCT_BASE_URL!,
+      }),
       apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
     });
 
