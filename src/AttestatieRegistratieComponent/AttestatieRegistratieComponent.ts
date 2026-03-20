@@ -1,4 +1,4 @@
-import { Stack } from 'aws-cdk-lib';
+import { Duration, Stack } from 'aws-cdk-lib';
 import { AttributeType, TableV2 } from 'aws-cdk-lib/aws-dynamodb';
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, FunctionUrl, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
@@ -56,6 +56,7 @@ export class AttestatieRegistratieComponent extends Construct {
         OPEN_PRODUCT_API_KEY: openProductApiKey.secretArn,
         OPEN_PRODUCT_BASE_URL: this.props.openProductBaseUrl,
       },
+      timeout: Duration.seconds(6),
     });
 
     arc.grantInvoke(new ServicePrincipal('cloudfront.amazonaws.com', {
