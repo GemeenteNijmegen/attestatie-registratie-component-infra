@@ -10,6 +10,7 @@ export interface AttestatieRegistratieComponentProps {
   verIdClientId: string;
   verIdIssuerUrl: string;
   arcCallbackEndpoint: string;
+  openProductBaseUrl: string;
 }
 
 export class AttestatieRegistratieComponent extends Construct {
@@ -53,7 +54,7 @@ export class AttestatieRegistratieComponent extends Construct {
         CACHE_TABLE_NAME: veridCacheTable.tableName,
         ARC_API_KEY_ARN: apiKey.secretArn,
         OPEN_PRODUCT_API_KEY: openProductApiKey.secretArn,
-        OPEN_PRODUCT_BASE_URL: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1'
+        OPEN_PRODUCT_BASE_URL: this.props.openProductBaseUrl,
       },
     });
 

@@ -41,6 +41,7 @@ class ArcStack extends Stack {
       arcCallbackEndpoint: this.props.configuration.arcCallbackEndpoint,
       verIdClientId: this.props.configuration.verIdClientId,
       verIdIssuerUrl: this.props.configuration.verIdIssuerUrl,
+      openProductBaseUrl: this.props.configuration.openProductBaseUrl,
     });
 
     // Setup cloudfront incl subdomain for existing hosted zone
