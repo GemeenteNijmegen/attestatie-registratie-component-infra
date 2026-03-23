@@ -1290,11 +1290,13 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
-"@gemeentenijmegen/attestatie-registratie-component@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/attestatie-registratie-component/-/attestatie-registratie-component-0.0.25.tgz#1966f7664293f0dbfb2a3ee9cd3c682ca89de8b5"
-  integrity sha512-az3epOzO8R+IJAmA9Elm7XJhDf38RUzHf3PZMFbInKVPe+FhVa8bjgOkgFeZaaJ/SaTes6jABGvDsorsguNwiQ==
+"@gemeentenijmegen/attestatie-registratie-component@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/attestatie-registratie-component/-/attestatie-registratie-component-0.0.26.tgz#1ef01da2c05df41e58ac8f0f24a947feeb24c939"
+  integrity sha512-abxnO4q6k4OoTJ4BBdDevnOZn9yIO8zXBRCad7sD8rePZhp/h4oU2ktoAXHqRjAT16Qn9s1Eks4+5bASVbtHjA==
   dependencies:
+    "@aws-sdk/client-dynamodb" "^3.1014.0"
+    "@aws-sdk/util-dynamodb" "^3.996.2"
     "@ver-id/node-client" "^0.12.0"
     dotenv "^17.3.1"
     jsonwebtoken "^9.0.3"

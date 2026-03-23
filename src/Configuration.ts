@@ -14,7 +14,7 @@ export interface Configuration {
 const configuration: Record<string, Configuration> = {
   development: {
     branch: 'development',
-    verIdIssuerUrl: 'https://ssi.oauth.ver.id/authorization/request',
+    verIdIssuerUrl: 'https://ssi.oauth.ver.id', // Withauth /authorization/intent path part
     arcCallbackEndpoint: 'https://arc.mijn-services-dev.csp-nijmegen.nl/callback',
     openProductBaseUrl: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1',
     deployToEnvironment: Statics.gnMijnServicesDev,
