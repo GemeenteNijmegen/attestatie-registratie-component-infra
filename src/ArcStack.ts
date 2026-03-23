@@ -39,7 +39,6 @@ class ArcStack extends Stack {
     // Setup arc
     const arc = new AttestatieRegistratieComponent(this, 'arc', {
       arcCallbackEndpoint: this.props.configuration.arcCallbackEndpoint,
-      verIdClientId: this.props.configuration.verIdClientId,
       verIdIssuerUrl: this.props.configuration.verIdIssuerUrl,
       openProductBaseUrl: this.props.configuration.openProductBaseUrl,
     });

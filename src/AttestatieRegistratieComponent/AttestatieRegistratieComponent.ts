@@ -7,7 +7,6 @@ import { Construct } from 'constructs';
 import { ArcFunction } from './lambda/arc-function';
 
 export interface AttestatieRegistratieComponentProps {
-  verIdClientId: string;
   verIdIssuerUrl: string;
   arcCallbackEndpoint: string;
   openProductBaseUrl: string;

@@ -12,7 +12,6 @@ test('Snapshot arc stack', () => {
     configuration: {
       branch: 'test',
       arcCallbackEndpoint: 'https://arc.example.com/callback',
-      verIdClientId: 'test-client-id',
       verIdIssuerUrl: 'https://verid.example.com/issuer',
       openProductBaseUrl: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1',
       deployToEnvironment: {
