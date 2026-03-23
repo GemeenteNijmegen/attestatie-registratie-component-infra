@@ -14,6 +14,11 @@ const project = new GemeenteNijmegenCdkApp({
     '@aws-sdk/lib-dynamodb',
     '@ver-id/node-client',
   ],
+  tsconfig: {
+    compilerOptions: {
+      isolatedModules: true,
+    },
+  },
 });
 
 project.eslint?.addRules({
