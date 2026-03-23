@@ -4,6 +4,7 @@ import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Function, FunctionUrl, FunctionUrlAuthType } from 'aws-cdk-lib/aws-lambda';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
+import { StateTable } from '../StateTable';
 import { ArcFunction } from './lambda/arc-function';
 
 export interface AttestatieRegistratieComponentProps {
@@ -27,6 +28,8 @@ export class AttestatieRegistratieComponent extends Construct {
     const clientSecret = new Secret(this, 'verid-client-secret', {
       description: 'Client secret VerID issueance',
     });
+
+    const state = new StateTable(this, 'state');
 
     const veridCacheTable = new TableV2(this, 'verid-cache-table', {
       partitionKey: {
@@ -53,6 +56,7 @@ export class AttestatieRegistratieComponent extends Construct {
         ARC_API_KEY_ARN: apiKey.secretArn,
         OPEN_PRODUCT_API_KEY: openProductApiKey.secretArn,
         OPEN_PRODUCT_BASE_URL: this.props.openProductBaseUrl,
+        STATE_TABLE_NAME: state.table.tableName,
       },
       timeout: Duration.seconds(6),
     });
@@ -67,6 +71,7 @@ export class AttestatieRegistratieComponent extends Construct {
 
     openProductApiKey.grantRead(arc);
     veridCacheTable.grantReadWriteData(arc);
+    state.table.grantReadWriteData(arc);
     clientSecret.grantRead(arc);
     apiKey.grantRead(arc);
     return arc;

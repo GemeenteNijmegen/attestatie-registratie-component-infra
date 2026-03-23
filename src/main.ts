@@ -15,3 +15,5 @@ new PipelineStack(app, `arc-infra-pipeline-${configuration.branch}`, {
 });
 
 app.synth();
+
+

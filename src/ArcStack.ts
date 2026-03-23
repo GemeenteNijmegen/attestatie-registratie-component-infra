@@ -36,6 +36,7 @@ class ArcStack extends Stack {
       zoneName: StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneName),
     });
 
+
     // Setup arc
     const arc = new AttestatieRegistratieComponent(this, 'arc', {
       arcCallbackEndpoint: this.props.configuration.arcCallbackEndpoint,

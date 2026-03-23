@@ -31,7 +31,7 @@ function parseEvent(event: LambdaFunctionURLEvent): ArcRequest {
  * @returns
  */
 export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult> {
-
+  console.debug('event', JSON.stringify(event));
   const request = parseEvent(event);
 
   try {
