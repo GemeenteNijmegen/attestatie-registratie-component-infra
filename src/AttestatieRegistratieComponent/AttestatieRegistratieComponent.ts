@@ -47,7 +47,6 @@ export class AttestatieRegistratieComponent extends Construct {
 
     const arc = new ArcFunction(this, 'arc-function', {
       environment: {
-        VERID_CLIENT_ID: this.props.verIdClientId,
         VERID_CLIENT_SECRET: clientSecret.secretArn,
         VERID_ISSUER_URL: this.props.verIdIssuerUrl,
         ARC_CALLBACK_ENDPOINT: this.props.arcCallbackEndpoint,

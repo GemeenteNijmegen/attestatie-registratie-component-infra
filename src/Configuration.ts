@@ -4,7 +4,6 @@ import { Statics } from './Statics';
 
 export interface Configuration {
   branch: string;
-  verIdClientId: string;
   verIdIssuerUrl: string;
   arcCallbackEndpoint: string;
   openProductBaseUrl: string;
@@ -15,8 +14,7 @@ export interface Configuration {
 const configuration: Record<string, Configuration> = {
   development: {
     branch: 'development',
-    verIdClientId: '6828f0a8-1c4c-478b-b60e-3db863a8a42e',
-    verIdIssuerUrl: 'https://oauth.ssi.dev.ver.garden',
+    verIdIssuerUrl: 'https://ssi.oauth.ver.id/authorization/request',
     arcCallbackEndpoint: 'https://arc.mijn-services-dev.csp-nijmegen.nl/callback',
     openProductBaseUrl: 'https://mijn-services-dev.csp-nijmegen.nl/open-product/producten/api/v1',
     deployToEnvironment: Statics.gnMijnServicesDev,

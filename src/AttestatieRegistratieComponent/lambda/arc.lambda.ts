@@ -44,7 +44,6 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
     });
     const arc = new AttestatieRegestratieComponent({
       attestationService: new VerIdAttestationService({
-        client_id: process.env.VERID_CLIENT_ID!,
         client_secret: await AWS.getSecret(process.env.VERID_CLIENT_SECRET!),
         issuerUri: process.env.VERID_ISSUER_URL!,
         redirectUri: process.env.ARC_CALLBACK_ENDPOINT!,
