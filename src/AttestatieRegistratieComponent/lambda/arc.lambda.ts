@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { AttestatieRegestratieComponent, OpenProductApiService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
+import { AttestatieRegistratieComponent, OpenProductApiService, VerIdAttestationService } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBResult, LambdaFunctionURLEvent } from 'aws-lambda';
@@ -42,7 +42,7 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
         ttlSeconds: 600,
       },
     });
-    const arc = new AttestatieRegestratieComponent({
+    const arc = new AttestatieRegistratieComponent({
       attestationService: new VerIdAttestationService({
         client_secret: await AWS.getSecret(process.env.VERID_CLIENT_SECRET!),
         issuerUri: process.env.VERID_ISSUER_URL!,
@@ -85,7 +85,7 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
 }
 
 
-async function start(request: ArcRequest, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+async function start(request: ArcRequest, arc: AttestatieRegistratieComponent): Promise<ALBResult> {
   console.log('Handling start...', request);
 
   if (request.type != 'producten' || !request.authorization) {
@@ -107,7 +107,7 @@ async function start(request: ArcRequest, arc: AttestatieRegestratieComponent): 
   };
 }
 
-async function callback(request: ArcRequest, arc: AttestatieRegestratieComponent): Promise<ALBResult> {
+async function callback(request: ArcRequest, arc: AttestatieRegistratieComponent): Promise<ALBResult> {
   console.log('Handling callback...', request);
 
   const success = await arc.callback(request);
