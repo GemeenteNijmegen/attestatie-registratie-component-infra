@@ -9,6 +9,14 @@ const dynamoClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({}),
 );
 
+let arc: ARC | undefined = undefined;
+let apikey: string | undefined = undefined;
+async function initialize() {
+  arc = await createARC();
+  apikey = await AWS.getSecret(process.env.ARC_API_KEY_ARN!);
+}
+
+const init = initialize();
 interface ArcRequest {
   path: string;
   productId: string;
@@ -37,21 +45,6 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
   const request = parseEvent(event);
 
   try {
-
-    // const arc = new AttestatieRegistratieComponent({
-    //   attestationService: new VerIdAttestationService({
-    //     client_secret: await AWS.getSecret(process.env.VERID_CLIENT_SECRET!),
-    //     issuerUri: process.env.VERID_ISSUER_URL!,
-    //     redirectUri: process.env.ARC_CALLBACK_ENDPOINT!,
-    //     cacheManager: dynamoDbCacheManager,
-    //   }),
-    //   productenService: new OpenProductApiService({
-    //     apiToken: await AWS.getSecret(process.env.OPEN_PRODUCT_API_KEY!),
-    //     baseUrl: process.env.OPEN_PRODUCT_BASE_URL!,
-    //   }),
-    //   apiKey: await AWS.getSecret(process.env.ARC_API_KEY_ARN!),
-    // });
-
     if (request.path.includes('/start')) {
       return await start(request);
     };
@@ -77,7 +70,6 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
     body: JSON.stringify({ error: 'Request not handled' }),
   };
 
-
 }
 
 /**
@@ -89,17 +81,21 @@ export async function handler(event: LambdaFunctionURLEvent): Promise<ALBResult>
 async function start(request: ArcRequest): Promise<ALBResult> {
   console.log('Handling start...', request);
 
+  // Initialize
+  await init;
+  if (!arc || !apikey) {
+    throw Error('Not initialized');
+  }
+
   // Secure this endpoint
-  const apikey = await AWS.getSecret(process.env.ARC_API_KEY_ARN!);
   if (!apikey || request.authorization !== apikey) {
     throw Error('Unauthorized');
   }
 
+  // Validate request
   if (request.type != 'producten' || !request.authorization) {
     throw Error('Invalid request');
   }
-
-  const arc = await createARC();
 
   const result = await arc.issue({
     source: 'openproduct', //TODO map from request.type
@@ -133,14 +129,19 @@ async function start(request: ArcRequest): Promise<ALBResult> {
  * @returns
  */
 async function callback(request: ArcRequest): Promise<ALBResult> {
+
+  await init;
+  if (!arc) {
+    throw Error('ARC not initialized');
+  }
+
   console.log('Handling callback...', request);
 
   if (!request.urlParams) {
     throw Error('No query parameters in request');
   }
 
-  const arc = await createARC();
-  const result = await arc.provider.callback(request.urlParams);
+  const result = await (arc.provider as VerID).callback(request.urlParams);
 
   if (result.success) {
     return {
@@ -165,7 +166,7 @@ async function createARC() {
       ttlSeconds: 600,
     },
   });
-  const arc = new ARC({
+  return new ARC({
     provider: new VerID(
       {
         issuerUri: process.env.VERID_ISSUER_URL!,
@@ -198,6 +199,6 @@ async function createARC() {
       new OpenProductOverlijdensakte(),
     ],
   });
-
-  return arc;
 }
+
+
