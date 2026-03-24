@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { ARC, DynamoDb, OpenProduct, OpenProductStandplaatsvergunning, VerID } from '@gemeentenijmegen/attestatie-registratie-component';
+import { ARC, DynamoDb, OpenProduct, OpenProductOverlijdensakte, OpenProductStandplaatsvergunning, VerID } from '@gemeentenijmegen/attestatie-registratie-component';
 import { AWS } from '@gemeentenijmegen/utils';
 import { DynamoDBCacheManager } from '@ver-id/node-client';
 import { ALBResult, LambdaFunctionURLEvent } from 'aws-lambda';
@@ -174,6 +174,7 @@ async function createARC() {
     ],
     attestations: [
       new OpenProductStandplaatsvergunning(),
+      new OpenProductOverlijdensakte(),
     ],
   });
 
