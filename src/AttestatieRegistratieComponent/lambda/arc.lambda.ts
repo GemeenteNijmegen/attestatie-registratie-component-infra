@@ -163,7 +163,7 @@ async function createARC() {
       },
     ),
     store: new DynamoDb({
-      tableName: process.env.ARC_STATE_TABLE!,
+      tableName: process.env.STATE_TABLE_NAME!,
       defaultTtlSeconds: 3600,
     }),
     sources: [
