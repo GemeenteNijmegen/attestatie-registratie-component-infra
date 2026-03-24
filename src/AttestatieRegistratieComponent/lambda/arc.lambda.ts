@@ -14,6 +14,7 @@ interface ArcRequest {
   productId: string;
   type: string;
   authorization?: string;
+  urlParams?: URLSearchParams;
 }
 
 function parseEvent(event: LambdaFunctionURLEvent): ArcRequest {
@@ -22,6 +23,7 @@ function parseEvent(event: LambdaFunctionURLEvent): ArcRequest {
     productId: event.queryStringParameters?.productId ?? '',
     type: event.queryStringParameters?.type ?? '',
     authorization: event.headers?.['x-api-key'] ?? event.headers?.Authorization,
+    urlParams: new URLSearchParams(event.queryStringParameters as Record<string, string> ?? {}),
   };
 }
 
@@ -123,17 +125,25 @@ async function start(request: ArcRequest): Promise<ALBResult> {
 async function callback(request: ArcRequest): Promise<ALBResult> {
   console.log('Handling callback...', request);
 
-  const prarams = new URLSearchParams({
-    is_wallet_ingeladen: 'true',
-    status: 'true',
-  });
+  if (!request.urlParams) {
+    throw Error('No query parameters in request');
+  }
+
+  const arc = await createARC();
+  const result = await arc.provider.callback(request.urlParams);
+
+  if (result.success) {
+    return {
+      statusCode: 302,
+      headers: { Location: `https://mijn.dev.nijmegen.nl/producten/${result.context.id}?issued=${result.sessionId}&is_wallet_ingeladen=true&status=true` },
+    };
+  }
 
   return {
     statusCode: 302,
-    headers: {
-      Location: `https://mijn.dev.nijmegen.nl/producten?${prarams.toString()}`,
-    },
+    headers: { Location: `https://mijn.dev.nijmegen.nl/producten/${result.context.id}?is_wallet_ingeladen=true&status=false` },
   };
+
 }
 
 
@@ -166,6 +176,7 @@ async function createARC() {
       tableName: process.env.STATE_TABLE_NAME!,
       defaultTtlSeconds: 3600,
       partitionKey: 'pk',
+      region: process.env.AWS_REGION!,
     }),
     sources: [
       new OpenProduct({
