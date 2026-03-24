@@ -57,8 +57,9 @@ export class AttestatieRegistratieComponent extends Construct {
         OPEN_PRODUCT_API_KEY: openProductApiKey.secretArn,
         OPEN_PRODUCT_BASE_URL: this.props.openProductBaseUrl,
         STATE_TABLE_NAME: state.table.tableName,
+        OPENPRODUCT_WRITE_BACK_FEATURE_FLAG: 'enabled',
       },
-      timeout: Duration.seconds(6),
+      timeout: Duration.seconds(10),
     });
 
     arc.grantInvoke(new ServicePrincipal('cloudfront.amazonaws.com', {
