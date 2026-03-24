@@ -155,10 +155,10 @@ async function createARC() {
       },
       {
         standplaatsvergunning: {
-          flowUuid: 'xxx-xxx-xxx-xxx',
+          flowUuid: 'd7e8f9a0-f001-4000-a000-100000000001',
         },
         overkleidingsakte: {
-          flowUuid: 'xxx-xxx-xxx-xxx',
+          flowUuid: 'd7e8f9a0-f003-4000-a000-100000000003',
         },
       },
     ),
