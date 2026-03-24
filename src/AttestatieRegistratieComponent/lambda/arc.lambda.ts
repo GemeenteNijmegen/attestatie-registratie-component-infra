@@ -165,6 +165,7 @@ async function createARC() {
     store: new DynamoDb({
       tableName: process.env.STATE_TABLE_NAME!,
       defaultTtlSeconds: 3600,
+      partitionKey: 'pk',
     }),
     sources: [
       new OpenProduct({
