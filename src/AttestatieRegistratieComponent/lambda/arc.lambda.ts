@@ -104,16 +104,26 @@ async function start(request: ArcRequest): Promise<ALBResult> {
   const result = await arc.issue({
     source: 'openproduct', //TODO map from request.type
     id: request.productId,
-    attestation: 'standplaatsvergunning',
   });
+
+  if (result.type == 'oauth') {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ url: result.url }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+  }
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ url: result.url }),
+    body: JSON.stringify({ sessionId: result.sessionId }),
     headers: {
       'Content-Type': 'application/json',
     },
   };
+
 }
 
 /**
@@ -167,7 +177,7 @@ async function createARC() {
         standplaatsvergunning: {
           flowUuid: 'd7e8f9a0-f001-4000-a000-100000000001',
         },
-        overkleidingsakte: {
+        overlijdensakte: {
           flowUuid: 'd7e8f9a0-f003-4000-a000-100000000003',
         },
       },
@@ -176,7 +186,6 @@ async function createARC() {
       tableName: process.env.STATE_TABLE_NAME!,
       defaultTtlSeconds: 3600,
       partitionKey: 'pk',
-      region: process.env.AWS_REGION!,
     }),
     sources: [
       new OpenProduct({
