@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: white;
+      /* Ensure the iframe has a white background */
+    }
+  </style>
+</head>
+
+<body>
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        background-color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!DOCTYPE html>
+    <html lang="nl">
+
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Standplaatsvergunning in Wallet</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+      <style>
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        html,
+        body {
+          height: 100%;
+          overflow: hidden;
+        }
+
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          background: #f0f4f8;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 16px 16px 0;
+        }
+
+        h1 {
+          font-size: 1.2rem;
+          color: #1a3a5c;
+          text-align: center;
+          margin-bottom: 4px;
+          font-weight: 700;
+        }
+
+        .subtitle {
+          font-size: 0.85rem;
+          color: #5a7a9a;
+          text-align: center;
+          margin-bottom: 12px;
+        }
+
+        .legend {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-bottom: 12px;
+          max-width: 480px;
+        }
+
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          color: #475569;
+        }
+
+        .legend-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+        }
+
+        .progress-bar-wrap {
+          width: 100%;
+          max-width: 480px;
+          background: #e2e8f0;
+          border-radius: 99px;
+          height: 6px;
+          margin-bottom: 12px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+
+        .progress-bar {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #3b82f6, #22c55e);
+          border-radius: 99px;
+        }
+
+        /* SCROLL CONTAINER */
+        .flow-wrapper {
+          width: 100%;
+          max-width: 480px;
+          flex: 1;
+          min-height: 0;
+          position: relative;
+          /* fade-out bovenaan */
+          -webkit-mask-image: linear-gradient(to bottom,
+              transparent 0px,
+              black 64px,
+              black calc(100% - 16px),
+              black 100%);
+          mask-image: linear-gradient(to bottom,
+              transparent 0px,
+              black 64px,
+              black calc(100% - 16px),
+              black 100%);
+        }
+
+        .flow-scroll {
+          height: 100%;
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: 8px 4px 16px;
+          /* verberg scrollbar maar laat scrollen toe */
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .flow-scroll::-webkit-scrollbar {
+          display: none;
+        }
+
+        .flow {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          gap: 0;
+        }
+
+        /* STAP */
+        .step {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          width: 100%;
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        .step-left {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex-shrink: 0;
+          width: 44px;
+        }
+
+        .step-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          flex-shrink: 0;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .step-line {
+          width: 2px;
+          background: #c8d8e8;
+          flex-grow: 1;
+          min-height: 24px;
+          margin-top: 4px;
+        }
+
+        .step-content {
+          background: white;
+          border-radius: 12px;
+          padding: 14px 16px;
+          flex: 1;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+          margin-bottom: 16px;
+          border-left: 4px solid transparent;
+        }
+
+        .step-number {
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 2px;
+        }
+
+        .step-title {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #1a3a5c;
+          margin-bottom: 4px;
+        }
+
+        .step-desc {
+          font-size: 0.8rem;
+          color: #5a7a9a;
+          line-height: 1.4;
+        }
+
+        .step-actor {
+          display: inline-block;
+          font-size: 0.7rem;
+          padding: 2px 8px;
+          border-radius: 20px;
+          margin-top: 8px;
+          font-weight: 600;
+        }
+
+        /* KLEUREN PER ACTOR */
+        .actor-inwoner .step-icon {
+          background: #e8f4fd;
+        }
+
+        .actor-inwoner .step-content {
+          border-left-color: #3b82f6;
+        }
+
+        .actor-inwoner .step-number {
+          color: #3b82f6;
+        }
+
+        .actor-inwoner .step-actor {
+          background: #e8f4fd;
+          color: #3b82f6;
+        }
+
+        .actor-arc .step-icon {
+          background: #e8f7ee;
+        }
+
+        .actor-arc .step-content {
+          border-left-color: #22c55e;
+        }
+
+        .actor-arc .step-number {
+          color: #22c55e;
+        }
+
+        .actor-arc .step-actor {
+          background: #e8f7ee;
+          color: #22c55e;
+        }
+
+        .actor-wallet .step-icon {
+          background: #fdf3e8;
+        }
+
+        .actor-wallet .step-content {
+          border-left-color: #f59e0b;
+        }
+
+        .actor-wallet .step-number {
+          color: #f59e0b;
+        }
+
+        .actor-wallet .step-actor {
+          background: #fdf3e8;
+          color: #f59e0b;
+        }
+
+        /* DATA PACKET */
+        .data-packet {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: #f8fafc;
+          border: 1px dashed #94a3b8;
+          border-radius: 8px;
+          padding: 6px 10px;
+          margin-top: 10px;
+          font-size: 0.75rem;
+          color: #475569;
+          opacity: 0;
+        }
+
+        .data-packet-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #22c55e;
+          flex-shrink: 0;
+        }
+
+        /* QR CODE */
+        .qr-block {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-top: 10px;
+          opacity: 0;
+        }
+
+        .qr-visual {
+          width: 52px;
+          height: 52px;
+          border: 2px solid #f59e0b;
+          border-radius: 6px;
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          grid-template-rows: repeat(5, 1fr);
+          gap: 2px;
+          padding: 4px;
+          background: white;
+          flex-shrink: 0;
+        }
+
+        .qr-cell {
+          border-radius: 1px;
+        }
+
+        .qr-cell.filled {
+          background: #1a3a5c;
+        }
+
+        .qr-cell.empty {
+          background: transparent;
+        }
+
+        /* WALLET BADGE */
+        .wallet-badge {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: linear-gradient(135deg, #1a3a5c, #2563eb);
+          color: white;
+          border-radius: 10px;
+          padding: 8px 12px;
+          margin-top: 10px;
+          font-size: 0.75rem;
+          opacity: 0;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .wallet-badge-icon {
+          font-size: 1.1rem;
+        }
+
+        /* SUCCESS + RESTART */
+        .success-check {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #22c55e, #16a34a);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.6rem;
+          box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+          margin: 8px auto 0;
+          opacity: 0;
+          transform: scale(0.5);
+        }
+
+        .restart-btn {
+          margin: 10px 0 16px;
+          padding: 10px 28px;
+          background: #1a3a5c;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 0.9rem;
+          cursor: pointer;
+          opacity: 0;
+          font-family: inherit;
+          transition: background 0.2s;
+        }
+
+        .restart-btn:hover {
+          background: #2563eb;
+        }
+      </style>
+    </head>
+
+    <body>
+      <h1>Standplaatsvergunning in je Wallet</h1>
+      <p class="subtitle">Zo werkt het ophalen van je vergunning</p>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#3b82f6"></div>
+          <span>Inwoner</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#22c55e"></div>
+          <span>ARC (connector)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f59e0b"></div>
+          <span>Wallet provider</span>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="flow-wrapper">
+        <div class="flow-scroll" id="flowScroll">
+          <div class="flow" id="flow">
+
+            <!-- STAP 1 -->
+            <div class="step actor-inwoner" id="step1">
+              <div class="step-left">
+                <div class="step-icon">🏠</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-number">Stap 1</div>
+                <div class="step-title">Inwoner klikt op de link</div>
+                <div class="step-desc">Via de productpagina in Mijn Omgeving klikt de inwoner op "Vergunning in wallet
+                  laden".</div>
+                <div class="step-actor">Inwoner</div>
+              </div>
+            </div>
+
+            <!-- STAP 2 -->
+            <div class="step actor-arc" id="step2">
+              <div class="step-left">
+                <div class="step-icon">⚙️</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-number">Stap 2</div>
+                <div class="step-title">ARC haalt gegevens op</div>
+                <div class="step-desc">ARC (connector) bevraagt Open Product en haalt de standplaatsvergunning op.</div>
+                <div class="data-packet" id="packet2">
+                  <div class="data-packet-dot"></div>
+                  <span>Vergunningdata opgehaald uit Open Product</span>
+                </div>
+                <div class="step-actor">ARC</div>
+              </div>
+            </div>
+
+            <!-- STAP 3 -->
+            <div class="step actor-arc" id="step3">
+              <div class="step-left">
+                <div class="step-icon">📤</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-number">Stap 3</div>
+                <div class="step-title">ARC geeft data door aan wallet provider</div>
+                <div class="step-desc">De vergunninggegevens worden veilig doorgestuurd naar de wallet provider.</div>
+                <div class="data-packet" id="packet3">
+                  <div class="data-packet-dot"></div>
+                  <span>Gegevens verstuurd → wallet provider ontvangen</span>
+                </div>
+                <div class="step-actor">ARC</div>
+              </div>
+            </div>
+
+            <!-- STAP 4 -->
+            <div class="step actor-arc" id="step4">
+              <div class="step-left">
+                <div class="step-icon">↩️</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-number">Stap 4</div>
+                <div class="step-title">ARC redirect inwoner</div>
+                <div class="step-desc">De browser van de inwoner wordt doorgestuurd naar de wallet provider.</div>
+                <div class="step-actor">ARC → Inwoner</div>
+              </div>
+            </div>
+
+            <!-- STAP 5 -->
+            <div class="step actor-wallet" id="step5">
+              <div class="step-left">
+                <div class="step-icon">📱</div>
+              </div>
+              <div class="step-content">
+                <div class="step-number">Stap 5</div>
+                <div class="step-title">Inwoner scant QR-code</div>
+                <div class="step-desc">De inwoner scant de QR-code en de vergunning wordt in de wallet geladen.</div>
+                <div class="qr-block" id="qrBlock">
+                  <div class="qr-visual" id="qrVisual"></div>
+                  <div style="font-size:0.75rem; color:#5a7a9a; line-height:1.4;">
+                    Scan met je wallet-app en de vergunning verschijnt direct.
+                  </div>
+                </div>
+                <div class="wallet-badge" id="walletBadge">
+                  <div class="wallet-badge-icon">🪪</div>
+                  <div>
+                    <div style="font-weight:700; font-size:0.8rem;">Standplaatsvergunning</div>
+                    <div style="opacity:0.8; font-size:0.7rem;">Geladen in wallet</div>
+                  </div>
+                </div>
+                <div class="step-actor">Wallet provider + Inwoner</div>
+              </div>
+            </div>
+
+            <!-- SUCCESS + RESTART (onderdeel van scroll-flow) -->
+            <div class="success-check" id="successCheck">✓</div>
+            <button class="restart-btn" id="restartBtn" onclick="restartAnimation()">Opnieuw afspelen</button>
+
+          </div>
+        </div>
+      </div>
+
+      <script>
+        gsap.registerPlugin(ScrollToPlugin);
+
+        // QR patroon
+        const qrPattern = [1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0];
+        const qrVisual = document.getElementById('qrVisual');
+        qrPattern.forEach(val => {
+          const cell = document.createElement('div');
+          cell.className = 'qr-cell ' + (val ? 'filled' : 'empty');
+          qrVisual.appendChild(cell);
+        });
+
+        const scrollEl = document.getElementById('flowScroll');
+
+        function scrollToStep(id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          gsap.to(scrollEl, {
+            scrollTo: { y: el, offsetY: 60 },
+            duration: 0.6,
+            ease: 'power2.inOut'
+          });
+        }
+
+        function runAnimation() {
+          const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+          const pb = document.getElementById('progressBar');
+
+          // Stap 1
+          tl.to('#step1', { opacity: 1, y: 0, duration: 0.5 })
+            .to(pb, { width: '20%', duration: 0.4 }, '<0.3')
+            .add(() => scrollToStep('step1'), '-=0.2')
+
+            // Stap 2
+            .to('#step2', { opacity: 1, y: 0, duration: 0.5 }, '+=0.5')
+            .to('#packet2', { opacity: 1, duration: 0.4 }, '-=0.1')
+            .to(pb, { width: '40%', duration: 0.4 }, '<')
+            .add(() => scrollToStep('step2'), '-=0.3')
+
+            // Stap 3
+            .to('#step3', { opacity: 1, y: 0, duration: 0.5 }, '+=0.5')
+            .to('#packet3', { opacity: 1, duration: 0.4 }, '-=0.1')
+            .to(pb, { width: '60%', duration: 0.4 }, '<')
+            .add(() => scrollToStep('step3'), '-=0.3')
+
+            // Stap 4
+            .to('#step4', { opacity: 1, y: 0, duration: 0.5 }, '+=0.5')
+            .to(pb, { width: '80%', duration: 0.4 }, '<0.2')
+            .add(() => scrollToStep('step4'), '-=0.3')
+
+            // Stap 5 + QR + wallet badge
+            .to('#step5', { opacity: 1, y: 0, duration: 0.5 }, '+=0.5')
+            .to('#qrBlock', { opacity: 1, duration: 0.4 }, '-=0.1')
+            .add(() => scrollToStep('step5'), '-=0.3')
+            .to('.qr-cell.filled', {
+              backgroundColor: '#1a3a5c',
+              stagger: 0.04,
+              duration: 0.15
+            }, '+=0.2')
+            .to('#walletBadge', {
+              opacity: 1,
+              duration: 0.5,
+              ease: 'back.out(1.7)'
+            }, '+=0.6')
+            .to(pb, { width: '100%', duration: 0.4 }, '<')
+
+            // Success + restart
+            .to('#successCheck', {
+              opacity: 1,
+              scale: 1,
+              duration: 0.5,
+              ease: 'back.out(1.7)'
+            }, '+=0.3')
+            .add(() => scrollToStep('successCheck'), '-=0.2')
+            .to('#restartBtn', { opacity: 1, duration: 0.3 }, '+=0.2');
+        }
+
+        function restartAnimation() {
+          gsap.set([
+            '#step1', '#step2', '#step3', '#step4', '#step5',
+            '#packet2', '#packet3', '#qrBlock', '#walletBadge',
+            '#successCheck', '#restartBtn'
+          ], { opacity: 0, clearProps: 'transform' });
+          gsap.set(['#step1', '#step2', '#step3', '#step4', '#step5'], { y: 20 });
+          gsap.set('#successCheck', { scale: 0.5 });
+          gsap.set('#progressBar', { width: '0%' });
+          gsap.set('.qr-cell.filled', { backgroundColor: '#1a3a5c' });
+
+          // Scroll terug naar boven
+          gsap.to(scrollEl, { scrollTo: { y: 0 }, duration: 0.4 });
+
+          setTimeout(runAnimation, 500);
+        }
+
+        window.addEventListener('load', runAnimation);
+      </script>
+    </body>
+
+    </html>
+  </body>
+
+  </html>
+
+  <script>
+
+  </script>
+</body>
+
+</html>
